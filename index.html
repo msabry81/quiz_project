@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المسابقة الرمضانية</title>
+    <style>
+        body {
+            background-color: #1e3a5f;
+            font-family: 'Tajawal', sans-serif;
+            text-align: center;
+            padding: 20px;
+            color: #ffffff;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 700px;
+            margin: auto;
+            color: #333;
+        }
+        h1 {
+            font-size: 32px;
+            color: #1e3a5f;
+        }
+        p {
+            font-size: 28px;
+            color: #222;
+        }
+        button {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 20px 25px;
+            font-size: 22px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #e68900;
+        }
+        .answer {
+            display: none;
+            font-size: 26px;
+            color: #28a745;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>المسابقة الرمضانية</h1>
+        <p id="question">السؤال هنا</p>
+        <p id="answer" class="answer">الإجابة هنا</p>
+        <button onclick="showAnswer()">إظهار الإجابة</button>
+        <button onclick="nextQuestion()">التالي</button>
+    </div>
+    <script>
+        let questions = [
+            { q: "ما اسم والدة النبي ﷺ؟", a: "آمنة بنت وهب" },
+            { q: "في أي مدينة وُلِد النبي ﷺ؟", a: "مكة المكرمة" },
+            { q: "ما اسم والد النبي ﷺ؟", a: "عبد الله بن عبد المطلب" },
+            { q: "ما اسم مرضعة النبي ﷺ؟", a: "حليمة السعدية" },
+            { q: "من كان يكفل النبي ﷺ بعد وفاة والدته؟", a: "جده عبد المطلب ثم عمه أبو طالب" },
+            { q: "ما اسم زوجة النبي ﷺ الأولى؟", a: "خديجة بنت خويلد" },
+            { q: "كم كان عمر النبي ﷺ عندما بُعث بالرسالة؟", a: "40 سنة" },
+            { q: "ما اسم الغار الذي كان يتعبد فيه النبي ﷺ؟", a: "غار حراء" },
+            { q: "من هو أول من آمن بالنبي ﷺ من الرجال؟", a: "أبو بكر الصديق" },
+            { q: "من هو أول من آمن بالنبي ﷺ من النساء؟", a: "خديجة بنت خويلد" },
+            { q: "من هو أول من آمن بالنبي ﷺ من الصبيان؟", a: "علي بن أبي طالب" },
+            { q: "ما اسم الهجرة التي قام بها النبي ﷺ من مكة إلى المدينة؟", a: "الهجرة النبوية" },
+            { q: "ما اسم القبيلة التي ينتمي إليها النبي ﷺ؟", a: "قريش" },
+            { q: "كم سنة استمرت دعوة النبي ﷺ في مكة؟", a: "13 سنة" },
+            { q: "كم عدد سنوات الدعوة في المدينة؟", a: "10 سنوات" },
+            { q: "ما اسم المعركة الأولى التي خاضها المسلمون؟", a: "غزوة بدر" },
+            { q: "ما اسم المدينة التي هاجر إليها النبي ﷺ؟", a: "المدينة المنورة" },
+            { q: "من هو الصحابي الذي نام في فراش النبي ﷺ ليلة الهجرة؟", a: "علي بن أبي طالب" },
+            { q: "ما اسم المعركة التي انتصر فيها المسلمون رغم قلة عددهم؟", a: "غزوة بدر" },
+            { q: "ما اسم العام الذي وُلِد فيه النبي ﷺ؟", a: "عام الفيل" },
+            { q: "من كان دليل النبي ﷺ في الهجرة إلى المدينة؟", a: "عبد الله بن أريقط" },
+            { q: "كم عدد أولاد النبي ﷺ الذكور؟", a: "ثلاثة (القاسم، عبد الله، إبراهيم)" },
+            { q: "من هي ابنة النبي ﷺ التي تزوجها عثمان بن عفان؟", a: "رقية ثم أم كلثوم" },
+            { q: "ما اسم المسجد الذي بناه النبي ﷺ في المدينة؟", a: "المسجد النبوي" },
+            { q: "ما هو تاريخ وفاة النبي ﷺ؟", a: "12 ربيع الأول سنة 11 هـ" },
+            { q: "ما اسم الغزوة التي جُرِح فيها النبي ﷺ؟", a: "غزوة أحد" },
+            { q: "من هو آخر من ودّع النبي ﷺ قبل وفاته؟", a: "فاطمة الزهراء" },
+            { q: "ما هي آخر وصايا النبي ﷺ قبل وفاته؟", a: "الصلاة وما ملكت أيمانكم" },
+            { q: "ما هو اسم سيف النبي ﷺ؟", a: "ذو الفقار" },
+            { q: "من هي أم المؤمنين التي توفيت آخر واحدة؟", a: "أم سلمة" }
+        ];
+        let currentIndex = 0;
+
+        function showAnswer() {
+            document.getElementById("answer").style.display = "block";
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex >= questions.length) {
+                alert("انتهت الأسئلة! سيتم إعادة البدء من جديد.");
+                currentIndex = 0;
+            }
+            document.getElementById("question").innerText = questions[currentIndex].q;
+            document.getElementById("answer").innerText = questions[currentIndex].a;
+            document.getElementById("answer").style.display = "none";
+        }
+        
+        document.getElementById("question").innerText = questions[0].q;
+        document.getElementById("answer").innerText = questions[0].a;
+    </script>
+</body>
+</html>
